@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "author": "Sistemas Embebidos",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "ultrasonic",
+      "top": -94.5,
+      "left": 139.9,
+      "attrs": { "distance": "10" }
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd",
+      "top": 102.4,
+      "left": 341.6,
+      "attrs": { "pins": "i2c", "i2cAddress": "0x27" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn_modo",
+      "top": 36.2,
+      "left": -115.2,
+      "attrs": { "color": "green", "xray": "1", "label": "MODO" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn_subir",
+      "top": 74.6,
+      "left": -115.2,
+      "attrs": { "color": "blue", "xray": "1", "label": "SUBIR" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn_bajar",
+      "top": 113,
+      "left": -115.2,
+      "attrs": { "color": "red", "xray": "1", "label": "BAJAR" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd1", "top": 163.2, "left": -154.2, "attrs": {} },
+    {
+      "type": "wokwi-led",
+      "id": "led_extrae",
+      "top": 198,
+      "left": -140.2,
+      "attrs": { "color": "red", "label": "EXTRACCION (IN1)" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_llena",
+      "top": 256,
+      "left": -140.2,
+      "attrs": { "color": "blue", "label": "LLENADO (IN2)" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_extrae",
+      "top": 214.4,
+      "left": -230.4,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_llena",
+      "top": 272,
+      "left": -230.4,
+      "attrs": { "value": "1000" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+
+    [ "esp:5", "ultrasonic:TRIG", "green", [] ],
+    [ "esp:18", "ultrasonic:ECHO", "blue", [] ],
+    [ "esp:5V", "ultrasonic:VCC", "red", [] ],
+    [ "esp:GND.2", "ultrasonic:GND", "black", [] ],
+
+    [ "esp:21", "lcd:SDA", "green", [] ],
+    [ "esp:22", "lcd:SCL", "blue", [] ],
+    [ "esp:5V", "lcd:VCC", "red", [] ],
+    [ "esp:GND.2", "lcd:GND", "black", [] ],
+
+    [ "esp:32", "btn_modo:2.r", "green", [] ],
+    [ "esp:33", "btn_subir:2.r", "green", [] ],
+    [ "esp:25", "btn_bajar:2.r", "green", [] ],
+    [ "btn_modo:1.l", "gnd1:GND", "black", [] ],
+    [ "btn_subir:1.l", "gnd1:GND", "black", [] ],
+    [ "btn_bajar:1.l", "gnd1:GND", "black", [] ],
+
+    [ "esp:3V3", "r_extrae:1", "red", [] ],
+    [ "r_extrae:2", "led_extrae:A", "red", [] ],
+    [ "led_extrae:C", "esp:26", "orange", [] ],
+
+    [ "esp:3V3", "r_llena:1", "red", [] ],
+    [ "r_llena:2", "led_llena:A", "red", [] ],
+    [ "led_llena:C", "esp:27", "orange", [] ]
+  ],
+  "dependencies": {}
+}
