@@ -1,64 +1,12 @@
 #include <Arduino.h>
 
-/*
-  =====================================================================
-  CONTROL DE TEMPERATURA CON ESP32
-  CICLO CONTINUO: CALENTAR HASTA MAX -> ENFRIAR HASTA MIN -> REPETIR
-  =====================================================================
-  Funcionamiento:
-   - Un sensor DS18B20 mide la temperatura dentro de la caja.
-   - El sistema trabaja en un ciclo sin fin:
-       1) CALENTANDO: el foco (rele IN1) esta encendido hasta que la
-          temperatura llega a la temperatura MAXIMA (ej. 60 C).
-       2) Al llegar al MAX se apaga el foco y se enciende la celda
-          Peltier junto con su ventilador (rele IN2).
-       3) ENFRIANDO: la Peltier sigue encendida hasta que la temperatura
-          baja a la temperatura MINIMA (ej. 30 C).
-       4) Al llegar al MIN se apaga la Peltier y se enciende de nuevo
-          el foco. Y asi sucesivamente.
-   - El ventilador extractor (rele IN3) SOLO se enciende mientras la caja
-     se esta ENFRIANDO, para ayudar a sacar el aire caliente. Mientras se
-     CALIENTA esta apagado, para no desperdiciar el calor del foco.
-   - Nunca estan el foco y la Peltier encendidos al mismo tiempo. Al
-     cambiar de uno a otro hay una pausa corta con los dos apagados.
-   - Si el sensor deja de responder, se apagan el foco y la Peltier por
-     seguridad (para que el foco no siga calentando sin control) y la
-     LCD lo indica. El extractor se enciende para sacar el calor que
-     quede en la caja.
 
-  Botones:
-   - MODO  -> cada pulsacion cambia entre editar el MAX y editar el MIN.
-   - SUBIR -> sube 1 grado el valor seleccionado.
-   - BAJAR -> baja 1 grado el valor seleccionado.
-   Los valores se guardan en memoria y se conservan aunque se vaya la luz.
+//    Botones:
+ //  - MODO  -> cada pulsacion cambia entre editar el MAX y editar el MIN.
+ //  - SUBIR -> sube 1 grado el valor seleccionado.
+  // - BAJAR -> baja 1 grado el valor seleccionado.
+  // Los valores se guardan en memoria y se conservan aunque se vaya la luz.
 
-  LCD 16x2:
-     +----------------+
-     |>Max:60° Min:30°|   <- limites; la ">" marca cual se esta editando
-     |45.3°  50% Calor|   <- temperatura actual, % y estado
-     +----------------+
-   - El % es la posicion de la temperatura entre el MIN (0%) y el MAX (100%).
-     Ejemplo con MIN 30 y MAX 60: 30° = 0%, 45° = 50%, 60° = 100%.
-   - Estado: "Calor" (foco encendido) o "Frio" (Peltier encendida).
-
-  LIBRERIAS (instalar desde Programa -> Incluir Libreria -> Administrar):
-   - LiquidCrystal I2C   (Frank de Brabander)
-   - OneWire             (Paul Stoffregen)
-   - DallasTemperature   (Miles Burton)
-   - Preferences         (ya viene con el core de ESP32)
-
-  CONEXIONES (en el adaptador: fila S = senal, V = voltaje, G = GND;
-  el jumper JUMP del adaptador debe estar en 5V):
-   - DS18B20:  DATA -> GPIO 4, VCC -> 3.3V, GND -> GND
-               + resistencia de 4.7k entre DATA y 3.3V (obligatoria)
-   - Reles:    IN1 -> GPIO 26 (FOCO)
-               IN2 -> GPIO 27 (PELTIER + su ventilador)
-               IN3 -> GPIO 13 (EXTRACTOR - ahora es obligatorio
-                      conectarlo a este rele para poder controlarlo)
-   - LCD I2C:  SDA -> GPIO 21, SCL -> GPIO 22, VCC -> 5V
-   - Botones (a GND): MODO -> GPIO 32, SUBIR -> GPIO 33, BAJAR -> GPIO 25
-  =====================================================================
-*/
 
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
@@ -120,7 +68,6 @@ bool  hayLectura    = false;
 unsigned long momentoCambioEstado = 0;
 
 // Lectura del sensor sin bloquear el programa
-// (el DS18B20 tarda ~750 ms en medir; mientras tanto los botones siguen funcionando)
 unsigned long momentoPeticion = 0;
 const unsigned long TIEMPO_CONVERSION_MS = 800;
 
