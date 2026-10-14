@@ -1,0 +1,4 @@
+# Wokwi Library List
+# See https://docs.wokwi.com/guides/libraries
+
+# Este programa no usa librerias externas (solo el core de Arduino para ESP32).

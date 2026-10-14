@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "author": "Sistemas Embebidos",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "sw1",
+      "top": -25,
+      "left": 200,
+      "attrs": {
+        "color": "green",
+        "xray": "1",
+        "label": "SW1 (enciende)"
+      }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "sw2",
+      "top": 35,
+      "left": 200,
+      "attrs": {
+        "color": "red",
+        "xray": "1",
+        "label": "SW2 (apaga)"
+      }
+    },
+    {
+      "type": "wokwi-gnd",
+      "id": "gnd1",
+      "top": 100,
+      "left": 280,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 200,
+      "left": 180,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 150,
+      "left": 270,
+      "attrs": {
+        "color": "green",
+        "label": "MOTOR (transistor)"
+      }
+    },
+    {
+      "type": "wokwi-gnd",
+      "id": "gnd2",
+      "top": 260,
+      "left": 280,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "esp:21",
+      "sw1:1.l",
+      "green",
+      []
+    ],
+    [
+      "sw1:2.r",
+      "gnd1:GND",
+      "black",
+      []
+    ],
+    [
+      "esp:19",
+      "sw2:1.l",
+      "blue",
+      []
+    ],
+    [
+      "sw2:2.r",
+      "gnd1:GND",
+      "black",
+      []
+    ],
+    [
+      "esp:2",
+      "r1:1",
+      "orange",
+      []
+    ],
+    [
+      "r1:2",
+      "led1:A",
+      "orange",
+      []
+    ],
+    [
+      "led1:C",
+      "gnd2:GND",
+      "black",
+      []
+    ]
+  ],
+  "dependencies": {}
+}
