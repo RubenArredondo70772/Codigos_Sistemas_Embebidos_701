@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "author": "Sistemas Embebidos",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    {
+      "type": "wokwi-ds18b20",
+      "id": "temp",
+      "top": -96,
+      "left": 168,
+      "attrs": { "temperature": "25" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_pullup",
+      "top": -110.4,
+      "left": 230.4,
+      "attrs": { "value": "4700" }
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd",
+      "top": 102.4,
+      "left": 341.6,
+      "attrs": { "pins": "i2c", "i2cAddress": "0x27" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn_modo",
+      "top": 36.2,
+      "left": -115.2,
+      "attrs": { "color": "green", "xray": "1", "label": "MODO" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn_subir",
+      "top": 74.6,
+      "left": -115.2,
+      "attrs": { "color": "blue", "xray": "1", "label": "SUBIR" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn_bajar",
+      "top": 113,
+      "left": -115.2,
+      "attrs": { "color": "red", "xray": "1", "label": "BAJAR" }
+    },
+    { "type": "wokwi-gnd", "id": "gnd1", "top": 163.2, "left": -154.2, "attrs": {} },
+    {
+      "type": "wokwi-led",
+      "id": "led_foco",
+      "top": 198,
+      "left": -140.2,
+      "attrs": { "color": "yellow", "label": "FOCO (IN1)" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_peltier",
+      "top": 256,
+      "left": -140.2,
+      "attrs": { "color": "blue", "label": "PELTIER (IN2)" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_extractor",
+      "top": 314,
+      "left": -140.2,
+      "attrs": { "color": "green", "label": "EXTRACTOR (IN3)" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_foco",
+      "top": 214.4,
+      "left": -230.4,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_peltier",
+      "top": 272,
+      "left": -230.4,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_extractor",
+      "top": 329.6,
+      "left": -230.4,
+      "attrs": { "value": "1000" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+
+    [ "esp:4", "temp:DQ", "green", [] ],
+    [ "esp:3V3", "temp:VCC", "red", [] ],
+    [ "esp:GND.2", "temp:GND", "black", [] ],
+    [ "temp:DQ", "r_pullup:1", "green", [] ],
+    [ "r_pullup:2", "esp:3V3", "red", [] ],
+
+    [ "esp:21", "lcd:SDA", "green", [] ],
+    [ "esp:22", "lcd:SCL", "blue", [] ],
+    [ "esp:5V", "lcd:VCC", "red", [] ],
+    [ "esp:GND.2", "lcd:GND", "black", [] ],
+
+    [ "esp:32", "btn_modo:2.r", "green", [] ],
+    [ "esp:33", "btn_subir:2.r", "green", [] ],
+    [ "esp:25", "btn_bajar:2.r", "green", [] ],
+    [ "btn_modo:1.l", "gnd1:GND", "black", [] ],
+    [ "btn_subir:1.l", "gnd1:GND", "black", [] ],
+    [ "btn_bajar:1.l", "gnd1:GND", "black", [] ],
+
+    [ "esp:3V3", "r_foco:1", "red", [] ],
+    [ "r_foco:2", "led_foco:A", "red", [] ],
+    [ "led_foco:C", "esp:26", "orange", [] ],
+
+    [ "esp:3V3", "r_peltier:1", "red", [] ],
+    [ "r_peltier:2", "led_peltier:A", "red", [] ],
+    [ "led_peltier:C", "esp:27", "orange", [] ],
+
+    [ "esp:3V3", "r_extractor:1", "red", [] ],
+    [ "r_extractor:2", "led_extractor:A", "red", [] ],
+    [ "led_extractor:C", "esp:13", "orange", [] ]
+  ],
+  "dependencies": {}
+}
