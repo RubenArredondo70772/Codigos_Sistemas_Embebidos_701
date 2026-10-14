@@ -1,41 +1,14 @@
 #include <Arduino.h>
 
 /*
-  =====================================================================
-  CONTROL DE NIVEL DE AGUA CON ESP32  (bote de 17 x 11 cm)
-  CICLO CONTINUO: LLENAR HASTA MAX -> VACIAR HASTA MIN -> REPETIR
-  =====================================================================
-  Funcionamiento:
-   - Un sensor ultrasonico (HC-SR04) mide la distancia entre el sensor
-     (montado arriba del bote) y la superficie del agua. Con eso se
-     calcula el nivel en % y en litros.
-   - El sistema trabaja en un ciclo sin fin:
-       1) LLENANDO: la bomba de llenado (IN2) esta encendida hasta que
-          el nivel llega al porcentaje MAXIMO (ej. 80%).
-       2) Al llegar al MAX se apaga la bomba de llenado y se enciende la
-          bomba de extraccion (IN1).
-       3) VACIANDO: la bomba de extraccion sigue encendida hasta que el
-          nivel baja al porcentaje MINIMO (ej. 20%).
-       4) Al llegar al MIN se apaga la extraccion y se enciende de nuevo
-          el llenado. Y asi sucesivamente.
-   - Nunca estan las 2 bombas encendidas al mismo tiempo. Al cambiar de
-     una a otra hay una pausa corta con las dos apagadas.
-   - Si el sensor deja de responder, se apagan las 2 bombas por
-     seguridad (para que no se desborde el bote) y la LCD lo indica.
-
-  Botones:
+   Botones:
    - MODO  -> cada pulsacion cambia entre editar el MAX y editar el MIN.
    - SUBIR -> sube 1% el valor del modo seleccionado.
    - BAJAR -> baja 1% el valor del modo seleccionado.
    Los valores se guardan en memoria y se conservan aunque se vaya la luz.
 
-  LCD 16x2:
-     +----------------+
-     |Max:80% Min:20% |   <- limites configurados
-     |[Max]  75% 0.86L|   <- modo seleccionado, % actual y litros
-     +----------------+
-
-  MEDIDAS DEL BOTE (cilindro de pie):
+ 
+  MEDIDAS DEL BOTE :
    - Sensor ubicado a 16.5 cm del fondo
    - 100% = agua a 12 cm del fondo  -> distancia sensor-agua = 4.5 cm
    - 0%   = agua en el fondo        -> distancia sensor-agua = 16.5 cm
@@ -43,15 +16,6 @@
 
   LIBRERIAS:
    - LiquidCrystal_I2C (Frank de Brabander)
-   - Preferences (ya viene con el core de ESP32)
-
-  CONEXIONES (en el adaptador: fila S = senal, V = voltaje, G = GND;
-  el jumper JUMP del adaptador debe estar en 5V):
-   - HC-SR04:  TRIG -> GPIO 5,  ECHO -> GPIO 18 (con divisor 1k/2k)
-   - Reles:    IN1 -> GPIO 26 (EXTRACCION), IN2 -> GPIO 27 (LLENADO)
-   - LCD I2C:  SDA -> GPIO 21,  SCL -> GPIO 22, VCC -> 5V
-   - Botones (a GND): MODO -> GPIO 32, SUBIR -> GPIO 33, BAJAR -> GPIO 25
-  =====================================================================
 */
 
 #include <Wire.h>
@@ -72,8 +36,6 @@
 #define LCD_SDA       21
 #define LCD_SCL       22
 
-// La mayoria de modulos de rele son "activos en BAJO" (LOW).
-// Si tus reles funcionan al reves, cambia LOW por HIGH.
 #define RELAY_ACTIVO   LOW
 #define RELAY_INACTIVO (!RELAY_ACTIVO)
 
